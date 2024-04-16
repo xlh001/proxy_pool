@@ -55,14 +55,17 @@ PROXY_FETCHER = [
     "freeProxy08",
     "freeProxy09",
     "freeProxy10",
-    "freeProxy11"
+    "freeProxy11",
+    "freeProxy17",
+    #  "wingser02",
+    "wingser03",
 ]
 
 # ############# proxy validator #################
 # 代理验证目标网站
-HTTP_URL = "http://httpbin.org"
+HTTP_URL = "https://www.baidu.com"
 
-HTTPS_URL = "https://www.qq.com"
+HTTPS_URL = "https://www.baidu.com"
 
 # 代理验证时超时时间
 VERIFY_TIMEOUT = 10

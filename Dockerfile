@@ -1,6 +1,6 @@
 FROM python:3.6-alpine
 
-MAINTAINER jhao104 <j_hao104@163.com>
+LABEL jhao104 <j_hao104@163.com>
 
 WORKDIR /app
 

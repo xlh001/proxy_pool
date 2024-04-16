@@ -20,10 +20,7 @@ from handler.configHandler import ConfigHandler
 
 conf = ConfigHandler()
 
-HEADER = {'User-Agent': 'Mozilla/5.0 (Windows NT 6.1; WOW64; rv:34.0) Gecko/20100101 Firefox/34.0',
-          'Accept': '*/*',
-          'Connection': 'keep-alive',
-          'Accept-Language': 'zh-CN,zh;q=0.8'}
+HEADER = {"Server": 'bfe'}
 
 IP_REGEX = re.compile(r"(.*:.*@)?\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5}")
 
@@ -59,11 +56,18 @@ def formatValidator(proxy):
 def httpTimeOutValidator(proxy):
     """ http检测超时 """
 
-    proxies = {"http": "http://{proxy}".format(proxy=proxy), "https": "https://{proxy}".format(proxy=proxy)}
+    proxies = {
+        "http": "http://{proxy}".format(proxy=proxy), "https": "https://{proxy}".format(proxy=proxy)}
 
     try:
-        r = head(conf.httpUrl, headers=HEADER, proxies=proxies, timeout=conf.verifyTimeout)
-        return True if r.status_code == 200 else False
+        r = head(conf.httpUrl, headers=HEADER,
+                 proxies=proxies, timeout=conf.verifyTimeout, verify=False)
+        if r.status_code == 200:
+            if conf.httpUrl and len(conf.httpUrl) > 0:
+                for key in conf.httpUrl.keys():
+                    if not r.headers.get(key) or not r.headers.get(key).startswith(conf.httpUrl.get(key)):
+                        return False
+                    return True
     except Exception as e:
         return False
 
@@ -72,10 +76,17 @@ def httpTimeOutValidator(proxy):
 def httpsTimeOutValidator(proxy):
     """https检测超时"""
 
-    proxies = {"http": "http://{proxy}".format(proxy=proxy), "https": "https://{proxy}".format(proxy=proxy)}
+    proxies = {
+        "http": "http://{proxy}".format(proxy=proxy), "https": "https://{proxy}".format(proxy=proxy)}
     try:
-        r = head(conf.httpsUrl, headers=HEADER, proxies=proxies, timeout=conf.verifyTimeout, verify=False)
-        return True if r.status_code == 200 else False
+        r = head(conf.httpsUrl, headers=HEADER, proxies=proxies,
+                 timeout=conf.verifyTimeout, verify=False)
+        if r.status_code == 200:
+            if conf.httpsUrl and len(conf.httpsUrl) > 0:
+                for key in conf.httpsUrl.keys():
+                    if not r.headers.get(key) or not r.headers.get(key).startswith(conf.httpsUrl.get(key)):
+                        return False
+                    return True
     except Exception as e:
         return False
 
