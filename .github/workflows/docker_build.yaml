@@ -6,9 +6,6 @@ on:
       - "master"
     tags:
       - "v*"
-  pull_request:
-    branches:
-      - "master"
 
 jobs:
   build-image:
@@ -34,11 +31,6 @@ jobs:
         with:
           images: |
             xlh001/proxy_pool
-          tags: |
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
 
       # 登录到 Docker Hub
       - name: Login to DockerHub
@@ -56,4 +48,3 @@ jobs:
           context: .
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
